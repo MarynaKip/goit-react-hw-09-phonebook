@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import UserMenu from "./components/UserMenu";
+import Content from "./components/Content";
+import { getCurrentUser } from "./redux/user/operations";
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.user.isAuthorizing);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="body">
+          <UserMenu />
+          <Content />
+          <ToastContainer />
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
